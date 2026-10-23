@@ -834,7 +834,8 @@ Item {
     opened = false
     filterText = ""
     root.pendingAgentPrompt = ""
-    if (prompt && action) Util.execArgv(["bash", "-c", action + ' && exec omarchy-agent-prompt "$1"', "bash", prompt])
+    // shortcut: omarchy-default-agent already launches omarchy-agent, which reads an unset $prompt; re-check after Omarchy updates
+    if (prompt && action) Util.execArgv(["env", "prompt=" + prompt, "bash", "-c", action])
     else root.runAction(action)
   }
 
