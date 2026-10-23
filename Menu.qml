@@ -682,7 +682,7 @@ Item {
       Util.execArgv(["omarchy-launch-browser", "https://duckduckgo.com/?q=" + encodeURIComponent(query)])
     } else if (root.defaultAgent) {
       root.cancel()
-      Util.execArgv(["omarchy-agent-prompt", query])
+      Util.execArgv(["bash", "-c", 'omarchy-agent-prompt "$1" || notify-send "Vault menu" "Could not start the default agent. Pick one in Setup › Default › Agent."', "bash", query])
     } else {
       root.pendingAgentPrompt = query
       root.setActiveMenu("setup.default.agent", true)
