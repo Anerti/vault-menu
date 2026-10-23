@@ -6,7 +6,6 @@ import QtQuick.Effects
 import qs.Commons
 import qs.Commons as Commons
 import qs.Ui
-import qs.services
 import "MenuModel.js" as MenuModel
 
 Item {
@@ -15,8 +14,6 @@ Item {
   property string omarchyPath: Quickshell.env("OMARCHY_PATH")
   property var shell: null
   property var manifest: null
-
-  property string pendingInitialMenu: "root"
 
   function open(payloadJson) {
     var payload = ({})
@@ -72,12 +69,7 @@ Item {
   property var providerQueue: []
   property int providerRevision: 0
 
-  readonly property var appLibrary: root.shell && root.shell.appLibrary ? root.shell.appLibrary : ownAppLibrary.item
-  Loader {
-    id: ownAppLibrary
-    active: !!root.shell && !root.shell.appLibrary
-    sourceComponent: Component { AppLibrary { } }
-  }
+  readonly property var appLibrary: root.shell ? root.shell.appLibrary : null
   property bool deleteConfirmOpen: false
   property var deleteTarget: null
   onOpenedChanged: if (!opened) { deleteConfirmOpen = false; deleteTarget = null }
@@ -251,18 +243,6 @@ Item {
 
   function item(id) {
     return root.items[id] || null
-  }
-
-  function stripJsonc(raw) {
-    return MenuModel.stripJsonc(raw)
-  }
-
-  function normalizeAliases(value) {
-    return MenuModel.normalizeAliases(value)
-  }
-
-  function normalizeItem(id, raw) {
-    return MenuModel.normalizeItem(id, raw)
   }
 
   function parseMenuJsonc(raw) {
@@ -454,14 +434,6 @@ Item {
     }
   }
 
-  function depthFor(id) {
-    return MenuModel.depthFor(root.items, id)
-  }
-
-  function pathFor(id) {
-    return MenuModel.pathFor(root.items, id)
-  }
-
   function parentPathFor(id) {
     return MenuModel.parentPathFor(root.items, id)
   }
@@ -470,36 +442,8 @@ Item {
     return MenuModel.isDescendantOf(root.items, id, ancestorId)
   }
 
-  function childCount(id) {
-    return MenuModel.childCount(root.items, root.itemOrder, id)
-  }
-
   function isVisible(entry) {
     return MenuModel.isVisible(root.items, root.itemOrder, root.whenResults, entry)
-  }
-
-  function labelFor(entry) {
-    return MenuModel.labelFor(entry, root.checkedResults)
-  }
-
-  function searchableToken(value) {
-    return MenuModel.searchableToken(value)
-  }
-
-  function leafIdFor(id) {
-    return MenuModel.leafIdFor(id)
-  }
-
-  function nameSearchText(entry) {
-    return MenuModel.nameSearchText(entry)
-  }
-
-  function termInSearchWords(term, text) {
-    return MenuModel.termInSearchWords(term, text)
-  }
-
-  function descriptionTextMatches(query, text) {
-    return MenuModel.descriptionTextMatches(query, text)
   }
 
   function matchesQuery(entry, query) {
@@ -905,7 +849,6 @@ Item {
       return "ok"
     }
     if (entry && entry.kind === "link" && entry.target) id = entry.target
-    root.pendingInitialMenu = id
     root.openExistingMenu(id)
     return "ok"
   }
