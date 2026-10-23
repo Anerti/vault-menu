@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "anerti.vault-menu",
+  "name": "Vault menu",
+  "version": "1.0.0",
+  "author": "anerti",
+  "description": "Omarchy menu with the Vault-Tec logo and the section's Vault Boy on top",
+  "kinds": [
+    "menu",
+    "bar-widget"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "menu": "Menu.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.menu"
+  },
+  "barWidget": {
+    "displayName": "Vault menu",
+    "description": "Launches the Vault menu",
+    "category": "Compositor",
+    "allowMultiple": false
+  }
+}
