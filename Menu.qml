@@ -760,6 +760,7 @@ Item {
 
   function goBack() {
     if (root.activeMenu === "root") return false
+    root.pendingAgentPrompt = ""
 
     if (root.navStack.length > 0) {
       var previous = root.navStack[root.navStack.length - 1]
