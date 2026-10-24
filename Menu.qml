@@ -158,11 +158,7 @@ Item {
   }
   property string artSection: ""
   // Rows outside the known sections keep the last art instead of blanking the poster.
-  Binding on artSection {
-    when: root.cursorSection !== ""
-    value: root.cursorSection
-    restoreMode: Binding.RestoreNone
-  }
+  onCursorSectionChanged: if (root.cursorSection) root.artSection = root.cursorSection
 
   function topLevelOf(id) {
     return MenuModel.topLevelOf(root.items, id)
@@ -578,7 +574,7 @@ Item {
     var rows = []
     var query = root.filterText.trim()
     root.searchDivider = false
-    root.noMatch = false
+    var noMatch = false
 
     if (query) {
       var currentRows = []
@@ -608,8 +604,8 @@ Item {
         for (var d = 0; d < drilldownRows.length; d++) drilldownRows[d].section = "drilldown"
       }
       rows = currentRows.concat(drilldownRows)
-      root.noMatch = rows.length === 0
-      if (root.noMatch) rows.push(root.fallbackRow(query))
+      noMatch = rows.length === 0
+      if (noMatch) rows.push(root.fallbackRow(query))
     } else {
       for (var j = 0; j < root.itemOrder.length; j++) {
         var child = root.item(root.itemOrder[j])
@@ -636,6 +632,7 @@ Item {
     }
 
     for (var k = 0; k < rows.length; k++) displayModel.append(rows[k])
+    root.noMatch = noMatch
     layoutSerial += 1
 
     if (displayModel.count === 0) selectedIndex = 0
