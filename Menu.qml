@@ -81,6 +81,7 @@ Item {
   property bool deleteConfirmOpen: false
   property var deleteTarget: null
   onOpenedChanged: if (!opened) { deleteConfirmOpen = false; deleteTarget = null }
+  // No-match fallback: "web" opens a browser search, "ai" asks the default agent.
   property string fallbackMode: "web"
   property string defaultAgent: ""
   property string pendingAgentPrompt: ""
@@ -129,6 +130,7 @@ Item {
   readonly property int posterGap: root.showBrand ? Style.space(18) : 0
   property int posterHeight: Style.space(520)
   readonly property color accent: Commons.Color.accent
+  // remove.gif's figure fills only half its frame; zoom it to match the others.
   readonly property var artZooms: ({ "remove": 1.8 })
   readonly property real artZoom: root.artZooms[root.artSection] || 1
   readonly property var artSections: ["apps", "learn", "trigger", "style", "setup", "install", "remove", "update", "about", "system"]
@@ -146,6 +148,7 @@ Item {
     wasteland: "Nothing in the vault. Search the wasteland."
   })
   readonly property string cursorSection: {
+    // displayModel.get() isn't tracked by bindings; layoutSerial re-runs this on every rebuild.
     root.layoutSerial
     if (root.noMatch) return "wasteland"
     var index = root.cursorActive ? root.selectedIndex : 0
@@ -154,6 +157,7 @@ Item {
     return root.artSections.indexOf(section) >= 0 ? section : ""
   }
   property string artSection: ""
+  // Rows outside the known sections keep the last art instead of blanking the poster.
   Binding on artSection {
     when: root.cursorSection !== ""
     value: root.cursorSection
@@ -1110,6 +1114,7 @@ Item {
     // card may grow from there. Closing unfreezes both.
     property int cardTop: -1
     property int maxRowsHeight: -1
+    // Frozen with cardTop so a narrowing search can't shrink the card under the poster.
     property int minCardHeight: 0
     readonly property int centeredTop: Math.max(Style.gapsOut, Math.round((height - root.cardHeight) / 2))
     readonly property int effectiveCardTop: cardTop >= 0 ? cardTop : centeredTop
@@ -1261,6 +1266,7 @@ Item {
           id: posterLogo
           anchors.horizontalCenter: parent.horizontalCenter
           y: Style.space(18)
+          // vaulttec-omarchy.svg viewBox is 930.07 × 360.
           width: Math.round(height * 930.07 / 360)
           height: Style.space(24)
 
@@ -1284,13 +1290,13 @@ Item {
         }
 
         Item {
+          id: artScreen
           anchors.left: parent.left
           anchors.right: parent.right
           anchors.top: posterLogo.bottom
           anchors.topMargin: Style.space(14)
           anchors.bottom: posterTag.top
           anchors.bottomMargin: Style.space(10)
-          id: artScreen
           clip: root.artZoom > 1
           transform: Scale { id: crtScale; origin.x: artScreen.width / 2; origin.y: artScreen.height / 2 }
 
