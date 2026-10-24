@@ -6,6 +6,7 @@ import QtQuick.Effects
 import qs.Commons
 import qs.Commons as Commons
 import qs.Ui
+import qs.services as HostServices
 import "MenuModel.js" as MenuModel
 
 Item {
@@ -77,7 +78,14 @@ Item {
 
   // Shared application engine (entries, hidden filters, icons, launch,
   // removal), owned by the shell and also used by the standalone launcher.
-  readonly property var appLibrary: root.shell ? root.shell.appLibrary : null
+  readonly property var appLibrary: root.shell ? (root.shell.appLibrary || ownAppLibrary.item) : null
+  // shortcut: Omarchy 4.0.6 hands third-party menus a null appLibrary (its kinds
+  // gate reads a model-copied manifest), so run our own; delete once upstream ships the fix.
+  Loader {
+    id: ownAppLibrary
+    active: !!root.shell && !root.shell.appLibrary
+    sourceComponent: HostServices.AppLibrary { }
+  }
   property bool deleteConfirmOpen: false
   property var deleteTarget: null
   onOpenedChanged: if (!opened) { deleteConfirmOpen = false; deleteTarget = null }
