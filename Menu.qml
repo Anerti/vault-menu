@@ -1560,7 +1560,6 @@ Item {
               required property string detail
               required property string path
               required property string action
-              required property int childCount
 
               readonly property bool hasCursor: root.cursorActive && row.index === root.selectedIndex
               readonly property bool isApp: row.kind === "app"
@@ -1659,17 +1658,6 @@ Item {
 
                 Text {
                   textFormat: Text.PlainText
-                  visible: false
-                  text: row.childCount
-                  color: root.foreground
-                  opacity: 0.45
-                  font.family: root.fontFamily
-                  font.pixelSize: Style.font.body
-                  anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Text {
-                  textFormat: Text.PlainText
                   text: row.kind === "menu" || row.kind === "link" ? "›" : ""
                   color: row.hasCursor ? root.rowSelectedText : root.foreground
                   opacity: (row.kind === "menu" || row.kind === "link") && !(row.hasCursor && root.showBrand) ? 0.36 : 0
@@ -1763,11 +1751,6 @@ Item {
               width: Style.space(320)
             }
           }
-        }
-
-        Item {
-          width: parent.width
-          height: 0
         }
       }
     }
