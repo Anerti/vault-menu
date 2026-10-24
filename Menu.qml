@@ -129,10 +129,12 @@ Item {
     remove: "Clear out what you no longer need.",
     update: "Keep the vault patched and humming.",
     about: "System info, version, credits.",
-    system: "Lock, suspend, restart or shut down."
+    system: "Lock, suspend, restart or shut down.",
+    wasteland: "Nothing in the vault. Search the wasteland."
   })
   readonly property string cursorSection: {
     root.layoutSerial
+    if (root.noMatch) return "wasteland"
     var index = root.cursorActive ? root.selectedIndex : 0
     var row = index >= 0 && index < displayModel.count ? displayModel.get(index) : null
     var section = root.topLevelOf(row ? row.itemId : root.activeMenu)
@@ -1258,7 +1260,7 @@ Item {
 
           Text {
             textFormat: Text.PlainText
-            text: "SECTION " + String(root.artSections.indexOf(root.artSection) + 1).padStart(2, "0") + " / " + root.artSections.length
+            text: root.artSection === "wasteland" ? "NO MATCH" : "SECTION " + String(root.artSections.indexOf(root.artSection) + 1).padStart(2, "0") + " / " + root.artSections.length
             color: root.accent
             font.family: root.fontFamily
             font.pixelSize: Style.font.caption
