@@ -6,7 +6,6 @@ import QtQuick.Effects
 import qs.Commons
 import qs.Commons as Commons
 import qs.Ui
-import qs.services as HostServices
 import "MenuModel.js" as MenuModel
 
 Item {
@@ -84,7 +83,8 @@ Item {
   Loader {
     id: ownAppLibrary
     active: !!root.shell && !root.shell.appLibrary
-    sourceComponent: HostServices.AppLibrary { }
+    // Loaded by path so a moved host file only empties Apps instead of breaking the menu.
+    source: "file://" + root.omarchyPath + "/shell/services/AppLibrary.qml"
   }
   property bool deleteConfirmOpen: false
   property var deleteTarget: null
