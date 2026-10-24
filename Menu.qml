@@ -1461,16 +1461,6 @@ Item {
             height: root.fallbackBarHeight
             spacing: Style.space(6)
 
-            Text {
-              anchors.verticalCenter: parent.verticalCenter
-              text: "NO MATCH →"
-              color: root.foreground
-              opacity: 0.5
-              font.family: root.fontFamily
-              font.pixelSize: Style.font.caption
-              font.letterSpacing: Style.space(1)
-            }
-
             Repeater {
               model: [{ mode: "web", text: "󰖟  WEB" }, { mode: "ai", text: "󰚩  AI" }]
 
@@ -1500,16 +1490,6 @@ Item {
                   onClicked: root.setFallbackMode(parent.modelData.mode)
                 }
               }
-            }
-
-            Text {
-              anchors.verticalCenter: parent.verticalCenter
-              text: "TAB"
-              color: root.foreground
-              opacity: 0.35
-              font.family: root.fontFamily
-              font.pixelSize: Style.font.caption
-              font.letterSpacing: Style.space(1)
             }
           }
         }
