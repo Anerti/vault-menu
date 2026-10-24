@@ -241,6 +241,19 @@ function isDescendantOf(items, id, ancestorId) {
   return false
 }
 
+// The first-level menu (`system`, `apps`, ...) an id lives under, or "" if unknown.
+function topLevelOf(items, id) {
+  var current = item(items, id)
+  var guard = 0
+
+  while (current && current.parent && current.parent !== "root" && guard < 32) {
+    current = item(items, current.parent)
+    guard += 1
+  }
+
+  return current ? current.id : ""
+}
+
 function childCount(items, itemOrder, id) {
   var count = 0
   var order = Array.isArray(itemOrder) ? itemOrder : []
@@ -495,6 +508,7 @@ if (typeof module !== "undefined") {
     pathFor: pathFor,
     parentPathFor: parentPathFor,
     isDescendantOf: isDescendantOf,
+    topLevelOf: topLevelOf,
     childCount: childCount,
     isVisible: isVisible,
     labelFor: labelFor,

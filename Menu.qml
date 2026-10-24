@@ -165,10 +165,7 @@ Item {
   }
 
   function topLevelOf(id) {
-    var entry = root.item(id)
-    var guard = 0
-    while (entry && entry.parent && entry.parent !== "root" && guard++ < 32) entry = root.item(entry.parent)
-    return entry ? entry.id : ""
+    return MenuModel.topLevelOf(root.items, id)
   }
 
   function finishRequest(selection) {
